@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+        media="screen,projection" />
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Button for Sending the POST -->
+    <script>
+        $.post('/submitJSONData',  // url
+            { myData: 'This is my data.' }, // data to be submit
+            function (data, status, xhr) {   // success callback function
+                alert('status: ' + status + ', data: ' + data.responseData);
+            },
+            'json'); // response data format
+    </script>
+
+</head>
+
+<body>
+    <nav class="purple lighten-1" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="#" class="brand-logo center">VOSuperhero</a>
+        </div>
+    </nav>
+
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <br><br>
+            <h1 class="header center orange-text">Recording Toggle</h1>
+            <div class="row center">
+                <h5 class="header col s12 light">Simply press the button; it'll change the LED in Dan's office to let
+                    him know that Bonnie is recording!</h5>
+            </div>
+            <div class="row center">
+                <button class="waves-effect waves-light btn-large purple" value="Recording">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-microphone" width="44"
+                        height="44" viewBox="0 0 24 24" stroke-width="1.2" stroke="#f0f0f0" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <rect x="9" y="2" width="6" height="11" rx="3" />
+                        <path d="M5 10a7 7 0 0 0 14 0" />
+                        <line x1="8" y1="21" x2="16" y2="21" />
+                        <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                </button>
+            </div>
+            <br><br>
+        </div>
+    </div>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+
+</html>

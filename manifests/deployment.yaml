@@ -23,8 +23,8 @@ spec:
       - image: danielmanners/isbonnierecording:arm64
         imagePullPolicy: Always
         name: blink-controller
-        # securityContext:
-        #   privileged: true
+        securityContext:
+          privileged: true
         resources:
           limits:
             cpu: "1"

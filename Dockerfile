@@ -6,7 +6,7 @@ COPY backend/main.py /isbonrecording/
 COPY backend/req.txt /isbonrecording/
 
 RUN apt update -y && apt upgrade -y && \
-    apt install -y usbutils libudev-dev python3 python3-pip python3-venv python-dev
+    apt install -y python3 python3-pip python3-venv python-dev
 
 RUN python3 -m venv .env && . /isbonrecording/.env/bin/activate && \
     pip install -U pip && pip install -r req.txt && pyinstaller --onefile main.py -n isbonrecording

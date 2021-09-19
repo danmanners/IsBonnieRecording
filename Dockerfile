@@ -19,4 +19,4 @@ RUN apt update -y && apt upgrade -y && \
     apt-get autoremove -y
 
 WORKDIR /isbonrecording
-ENTRYPOINT [ "/isbonrecording/.env/bin/python3","/isbonrecording/main.py" ]
+ENTRYPOINT [ "/usr/local/bin/isbonrecording" ]

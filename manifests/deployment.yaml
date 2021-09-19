@@ -8,15 +8,10 @@ metadata:
   namespace: default
 spec:
   progressDeadlineSeconds: 30
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       run: blink-controller
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -25,7 +20,7 @@ spec:
       nodeSelector:
         feature.node.kubernetes.io/custom-blink1: 'true'
       containers:
-      - image: danielmanners/isbonnierecording:latest
+      - image: danielmanners/isbonnierecording:arm64
         imagePullPolicy: Always
         name: blink-controller
         # securityContext:

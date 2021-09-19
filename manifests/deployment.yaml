@@ -8,7 +8,7 @@ metadata:
   namespace: default
 spec:
   progressDeadlineSeconds: 30
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       run: blink-controller
@@ -25,7 +25,7 @@ spec:
       nodeSelector:
         feature.node.kubernetes.io/custom-blink1: 'true'
       containers:
-      - image: danielmanners/isbonrecording:latest
+      - image: danielmanners/isbonnierecording:latest
         imagePullPolicy: Always
         name: blink-controller
         # securityContext:
@@ -40,9 +40,9 @@ spec:
         volumeMounts:
           - mountPath: /dev/hidraw0
             name: ttyblink
-        ports:
-        - containerPort: 80
-          protocol: TCP
+        # ports:
+        # - containerPort: 80
+        #   protocol: TCP
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       volumes:

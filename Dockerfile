@@ -9,10 +9,10 @@ RUN apt update -y && apt upgrade -y && \
     apt install -y usbutils libudev-dev python3 python3-pip python3-venv python-dev
 
 RUN python3 -m venv .env && . /isbonrecording/.env/bin/activate && \
-    pip install -U pip && pip install -r req.txt
+    pip install -U pip && pip install -r req.txt && pyinstaller --onefile main.py -n isbonrecording
 
 FROM debian:stable as final_image
-COPY --from=base_image /isbonrecording /isbonrecording
+COPY --from=base_image /isbonrecording/dist/isbonrecording /usr/local/bin/
 
 RUN apt update -y && apt upgrade -y && \
     apt install -y usbutils libudev-dev && \

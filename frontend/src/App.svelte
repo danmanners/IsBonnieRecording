@@ -1,26 +1,70 @@
 <script>
-  // Create the promise for our eventual check of the light status
-  let promise = Promise.resolve([]);
+  let buttonColor = "black";
+  let buttonPressed = { status: false };
   let buttonDefaultText = "Check Status";
-  let buttonPressed = { status: true };
-  let buttonColor = 'purple';
 
-  // Get the current status of the light in JSON
-  async function getLightStatus() {
-    const response = await self.fetch("http://localhost:9080/lightStatus");
+  async function checkLightStatus() {
+    const res = await fetch("http://localhost:9080/api/recording");
+    let jsonResponse = await res.json();
+    let lightStatus = await jsonResponse.recording;
+    if (res.ok) {
+      if (lightStatus == true) {
+        buttonColor = "purple";
+        return "recording";
+      }
 
-    if (response.ok) {
-      return response.json();
+      if (lightStatus == false) {
+        buttonColor = "black";
+        return "not recording";
+      }
     } else {
-      throw new Error(lightStatus);
+      throw new Error(res.text());
     }
   }
 
-  // On click, do the thing!
+  async function updateLightStatus() {
+    const res = await fetch("http://localhost:9080/api/recording");
+    let jsonResponse = await res.json();
+    let lightStatus = await jsonResponse.recording;
+
+    let headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    }
+
+    if (res.ok) {
+      if (lightStatus == true) {
+        fetch("http://localhost:9080/api/recording", {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
+            recording: false,
+          }),
+        });
+        buttonColor = "black";
+        return "not recording";
+      }
+
+      if (lightStatus == false) {
+        fetch("http://localhost:9080/api/recording", {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
+            recording: true,
+          }),
+        });
+        buttonColor = "purple";
+        return "recording";
+      }
+    } else {
+      throw new Error(res.text());
+    }
+  }
+
+  let promise = checkLightStatus();
+
   function handleClick() {
-    // Now use the promise
-    buttonPressed.status = false;
-    promise = getLightStatus();
+    promise = updateLightStatus();
   }
 </script>
 
@@ -51,8 +95,8 @@
           {/if}
           {#await promise}
             ...waiting
-          {:then lightStatus}
-            {lightStatus}
+          {:then recordingStatus}
+            {recordingStatus}
           {:catch error}
             {error.message}
           {/await}

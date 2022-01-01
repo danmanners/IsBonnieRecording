@@ -20,9 +20,21 @@ spec:
       nodeSelector:
         feature.node.kubernetes.io/custom-blink1: 'true'
       containers:
-      - image: danielmanners/isbonnierecording:arm64
+      - image: danielmanners/isbonrecording-frontend:arm64
         imagePullPolicy: Always
-        name: blink-controller
+        name: frontend
+        resources:
+          limits:
+            cpu: "1"
+            memory: 160Mi
+          requests:
+            cpu: 500m
+            memory: 96Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      - image: danielmanners/isbonrecording-backend:arm64
+        imagePullPolicy: Always
+        name: backend
         securityContext:
           privileged: true
         resources:
@@ -35,9 +47,6 @@ spec:
         volumeMounts:
           - mountPath: /dev/hidraw0
             name: ttyblink
-        # ports:
-        # - containerPort: 80
-        #   protocol: TCP
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       volumes:

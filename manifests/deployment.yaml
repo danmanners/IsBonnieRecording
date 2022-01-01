@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    run: blink-controller
+    run: isbonnierecording
   name: is-bon-recording
   namespace: default
 spec:
@@ -11,17 +11,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      run: blink-controller
+      run: isbonnierecording
   template:
     metadata:
       labels:
-        run: blink-controller
+        run: isbonnierecording
     spec:
       nodeSelector:
         feature.node.kubernetes.io/custom-blink1: 'true'
       containers:
-      - image: danielmanners/isbonrecording-frontend:arm64
-        imagePullPolicy: Always
+      - image: ghcr.io/danmanners/isbonrecording-frontend:v0.1.1
+        imagePullPolicy: IfNotPresent
         name: frontend
         resources:
           limits:
@@ -30,10 +30,17 @@ spec:
           requests:
             cpu: 500m
             memory: 96Mi
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /etc/nginx/conf.d/default.conf
+            subPath: default.conf
+        ports:
+        - containerPort: 5000
+          protocol: TCP
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-      - image: danielmanners/isbonrecording-backend:arm64
-        imagePullPolicy: Always
+      - image: ghcr.io/danmanners/isbonrecording-backend:v0.1.1
+        imagePullPolicy: IfNotPresent
         name: backend
         securityContext:
           privileged: true
@@ -44,6 +51,9 @@ spec:
           requests:
             cpu: 500m
             memory: 96Mi
+        ports:
+        - containerPort: 9080
+          protocol: TCP
         volumeMounts:
           - mountPath: /dev/hidraw0
             name: ttyblink
@@ -53,6 +63,12 @@ spec:
         - name: ttyblink
           hostPath:
             path: /dev/hidraw0
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            items:
+            - key: default.conf
+              path: default.conf
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext: {}

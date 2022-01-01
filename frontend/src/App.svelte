@@ -2,7 +2,7 @@
   let buttonColor = "black";
   let buttonPressed = { status: false };
   let buttonDefaultText = "Check Status";
-  const url = "http://10.45.0.126:5000/api/recording";
+  const url = "https://recording.danmanners.com/api/recording";
 
   async function checkLightStatus() {
     const res = await fetch(url);

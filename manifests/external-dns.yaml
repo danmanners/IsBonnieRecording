@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recording-extname
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: recording.danmanners.com,shutthefuckup.danmanners.com,isbonnierecording.danmanners.com
+    external-dns.alpha.kubernetes.io/ttl: "300"
+spec:
+  type: ExternalName
+  externalName: kube.danmanners.com
+  selector:
+    run: isbonnierecording
+  sessionAffinity: None

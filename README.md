@@ -32,14 +32,44 @@ podman play kube manifests/deployment-dev.yaml --down
 1. Ensure that the containers are built appropriately and pushed up to Docker Hub.
 
 ```bash
-# Git Short SHA
-export GSSHA="$(git rev-parse --short HEAD)"
+# Set the Git Tag
+export docker_tag="v0.1.1"
 
-# Build Images
-podman build -t "docker.io/danielmanners/isbonrecording-frontend:${GSSHA}" frontend
-podman build -t "docker.io/danielmanners/isbonrecording-backend:${GSSHA}" backend
+# Create the Frontend Manifest
+buildah manifest create isbonrecording-frontend
 
-# Push Images
-podman push "docker.io/danielmanners/isbonrecording-frontend:${GSSHA}"
-podman push "docker.io/danielmanners/isbonrecording-backend:${GSSHA}"
+# Build Frontend Images
+buildah bud --tag "ghcr.io/danmanners/isbonrecording-frontend:${docker_tag}" \
+  --manifest isbonrecording-frontend \
+  --arch amd64 frontend
+
+buildah bud --tag "ghcr.io/danmanners/isbonrecording-frontend:${docker_tag}" \
+  --manifest isbonrecording-frontend \
+  --arch arm64 frontend
+
+# Push Frontend Images
+buildah manifest push --all \
+  isbonrecording-frontend "docker://ghcr.io/danmanners/isbonrecording-frontend:${docker_tag}"
+
+# Create the Backend Manifest
+buildah manifest create isbonrecording-backend
+
+# Build Backend Images
+buildah bud --tag "ghcr.io/danmanners/isbonrecording-backend:${docker_tag}" \
+  --manifest isbonrecording-backend \
+  --arch amd64 backend
+
+buildah bud --tag "ghcr.io/danmanners/isbonrecording-backend:${docker_tag}" \
+  --manifest isbonrecording-backend \
+  --arch arm64 backend
+
+# Push Backend Images
+buildah manifest push --all \
+  isbonrecording-backend "docker://ghcr.io/danmanners/isbonrecording-backend:${docker_tag}"
+```
+
+2. Deploy/Update the Kubernetes Manifest
+
+```bash
+kubectl apply -k manifests
 ```

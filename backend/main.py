@@ -51,7 +51,7 @@ def recording():
                     "Access-Control-Allow-Origin",
                     "Access-Control-Allow-Methods",
                 ],
-            }
+            },
         )
         return response
     elif request.method == "GET":

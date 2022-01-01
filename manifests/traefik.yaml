@@ -1,0 +1,33 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: recording-danmanners-com-web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`isbonnierecording.danmanners.com`)||Host(`shutthefuckup.danmanners.com`)||Host(`recording.danmanners.com`)
+      kind: Rule
+      services:
+        - name: isbonrecording
+          port: 80
+      middlewares:
+        - name: http-https-redirectscheme
+          namespace: kube-system
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: recording-danmanners-com-websecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`isbonnierecording.danmanners.com`)||Host(`shutthefuckup.danmanners.com`)||Host(`recording.danmanners.com`)
+      kind: Rule
+      services:
+        - name: isbonrecording
+          port: 80
+  tls:
+    secretName: recording-cert

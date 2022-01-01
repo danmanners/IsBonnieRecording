@@ -4,11 +4,9 @@ kind: Certificate
 metadata:
   name: recording-cert
 spec:
-  commonName: isbonnierecording.danmanners.com
+  commonName: recording.danmanners.com
   secretName: recording-cert
   dnsNames:
-    - isbonnierecording.danmanners.com
-    - shutthefuckup.danmanners.com
     - recording.danmanners.com
 
   issuerRef:

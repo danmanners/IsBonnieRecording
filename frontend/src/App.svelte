@@ -2,9 +2,10 @@
   let buttonColor = "black";
   let buttonPressed = { status: false };
   let buttonDefaultText = "Check Status";
+  const url = "http://localhost/api/recording";
 
   async function checkLightStatus() {
-    const res = await fetch("http://localhost:9080/api/recording");
+    const res = await fetch(url);
     let jsonResponse = await res.json();
     let lightStatus = await jsonResponse.recording;
     if (res.ok) {
@@ -23,7 +24,7 @@
   }
 
   async function updateLightStatus() {
-    const res = await fetch("http://localhost:9080/api/recording");
+    const res = await fetch(url);
     let jsonResponse = await res.json();
     let lightStatus = await jsonResponse.recording;
 
@@ -34,7 +35,7 @@
 
     if (res.ok) {
       if (lightStatus == true) {
-        fetch("http://localhost:9080/api/recording", {
+        fetch(url, {
           method: "POST",
           headers: headers,
           body: JSON.stringify({
@@ -46,7 +47,7 @@
       }
 
       if (lightStatus == false) {
-        fetch("http://localhost:9080/api/recording", {
+        fetch(url, {
           method: "POST",
           headers: headers,
           body: JSON.stringify({

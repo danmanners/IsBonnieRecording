@@ -1,0 +1,19 @@
+FROM docker.io/python:3.10-slim-bullseye as builder
+
+RUN apt update && apt install -y \
+    libusb-1.0-0-dev libudev-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/
+
+# Copy in the required files
+COPY req.txt .
+RUN /usr/local/bin/pip install -r req.txt
+
+# Copy in the MAIN file
+COPY main.py .
+
+ENTRYPOINT [ "python","main.py" ]
+
+# FROM docker.io/debian:stable-slim as runtime
+# copy --from=builder /opt/

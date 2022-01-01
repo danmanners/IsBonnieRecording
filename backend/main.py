@@ -43,7 +43,7 @@ def recording():
         response = Response(
             status=204,
             headers={
-                "Access-Control-Allow-Origin": ["*"],
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": ["GET", "POST", "OPTIONS"],
                 "Access-Control-Allow-Headers": [
                     "Charset",
@@ -51,11 +51,10 @@ def recording():
                     "Access-Control-Allow-Origin",
                     "Access-Control-Allow-Methods",
                 ],
-            },
+            }
         )
         return response
     elif request.method == "GET":
-        # Response.headers.add("Access-Control-Allow-Origin", "127.0.0.1")
         response = Response(
             json.dumps(isrecording),
             status=200,
@@ -99,7 +98,7 @@ def recording():
 
 if __name__ == "__main__":
     try:
-        app.run(port=9080)
+        app.run(port=9080, host="0.0.0.0")
         turn_led_off()
     except KeyboardInterrupt:
         print("killing the service.")

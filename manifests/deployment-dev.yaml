@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  labels:
+    run: blink-controller
+  name: is-bon-recording
+spec:
+  containers:
+  - image: localhost/ibr-backend:latest
+    imagePullPolicy: Always
+    name: blink-controller
+    securityContext:
+      privileged: true
+    resources:
+      limits:
+        cpu: "1"
+        memory: 160Mi
+      requests:
+        cpu: 500m
+        memory: 96Mi
+    volumeMounts:
+      - mountPath: /dev/hidraw0
+        name: ttyblink
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+  volumes:
+    - name: ttyblink
+      hostPath:
+        path: /dev/hidraw0
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  securityContext: {}
+  terminationGracePeriodSeconds: 3

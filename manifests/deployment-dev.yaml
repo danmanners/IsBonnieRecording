@@ -7,24 +7,27 @@ metadata:
   name: is-bon-recording
 spec:
   containers:
-  - image: localhost/ibr-backend:latest
-    imagePullPolicy: Always
-    name: blink-controller
-    securityContext:
-      privileged: true
-    resources:
-      limits:
-        cpu: "1"
-        memory: 160Mi
-      requests:
-        cpu: 500m
-        memory: 96Mi
-    volumeMounts:
-      - mountPath: /dev/hidraw0
-        name: ttyblink
+  - image: localhost/ibr-frontend:dev
+    name: frontend
+    resources: {}
     terminationMessagePath: /dev/termination-log
     terminationMessagePolicy: File
-  volumes:
+    ports:
+    - containerPort: 80
+      protocol: TCP
+      hostPort: 5000
+  - image: localhost/ibr-backend:dev
+    name: backend
+    securityContext:
+      privileged: true
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    ports:
+    - containerPort: 9080
+      protocol: TCP
+      hostPort: 9080
+    volumes:
     - name: ttyblink
       hostPath:
         path: /dev/hidraw0

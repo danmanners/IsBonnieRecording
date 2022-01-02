@@ -8,7 +8,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - traefik.yaml
-  - external-dns.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

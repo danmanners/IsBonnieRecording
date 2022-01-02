@@ -29,5 +29,38 @@ spec:
       services:
         - name: isbonrecording
           port: 80
+      middlewares:
+        # - name: recording-whitelist
+        - name: recording-auth
   tls:
     secretName: recording-cert
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: recording-auth
+spec:
+  basicAuth:
+    secret: authsecret
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authsecret
+stringData:
+  users: bonnie:$apr1$EQu0vASM$4yZLLgvssfAyw2AiQXyi9/
+  # Generate Credentials with `htpasswd -nb username password`
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: recording-whitelist
+# spec:
+#   ipWhiteList:
+#     ipstrategy:
+#       depth: 3
+#     sourceRange:
+#       - 127.0.0.1/32
+#       - 10.45.0.0/23
+#       - 10.56.0.0/24
+#       - 10.90.0.0/24

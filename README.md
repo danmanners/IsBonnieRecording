@@ -1,10 +1,35 @@
 # Is Bonnie Recording
 
-Simple frontend and backend to allow my Voice Over Actress wife ([here](https://vosuperhero.com)) to turn on a USB LED to tell me to shut up so she can record 😂😂
+Simple frontend and backend to allow my Voice Over Actress wife ([here](https://vosuperhero.com)) to turn on a USB LED in my office to tell me to be quiet so she can record 😂😂
 
-## How does this work
+## How does this work and...why
 
-I'm leveraging a [blink(1)](https://blink1.thingm.com/) LED light to turn on/off when my wife needs to tell me to be quiet when she needs to record. The frontend is written in [Svelte](https://svelte.dev/) and is quite simple, and the backend is Python which utilizes [Flask](https://flask.palletsprojects.com/en/2.0.x/) and the [blink(1) Python Library](https://pypi.org/project/blink1/) to turn the light on and off via JSON POSTs with a simple REST API.
+I'm leveraging a [blink(1)](https://blink1.thingm.com/) LED light to turn on/off when my wife needs to tell me to be quiet when she needs to record. The frontend is written in [Svelte](https://svelte.dev/) and is quite simple, and the backend is Python which utilizes [Flask](https://flask.palletsprojects.com/en/2.0.x/) and the [blink(1) Python Library](https://pypi.org/project/blink1/) to turn the light on and off via JSON POSTs with a simple REST API. The node selection works in conjunction with [node-feature-discovery](https://github.com/kubernetes-sigs/node-feature-discovery), which is a fantastic way to map physically connected devices to nodes.
+
+![ButWhy](https://media2.giphy.com/media/s239QJIh56sRW/giphy.gif)
+
+The few big pushes for this project have been:
+
+- I wanted to prove _at least slightly_ capable with modern frontend frameworks
+- I wanted to leverage node auto-selection based on **where** the USB blink(1) devices is connected
+- I wanted to have a simple button to press to turn on a light no matter where my wife was to tell me she needs to record
+- I wanted to have a good example of multi-architecture containers without having to make any architecture-specific settings in the Kubernetes deployment manifest
+
+## Technologies Leveraged / Utilized
+
+- Svelte (Frontend)
+- Python3 (Backend)
+  - Flask
+- Hardware
+  - Blink(1)
+  - Turing Pi v2
+- Kubernetes
+  - Traefik v2
+  - Cert-Manager
+  - node-feature-discovery
+  - podman
+  - buildah
+  - NGINX
 
 ## Local Development
 
@@ -27,7 +52,7 @@ If you want to shut it down or re-deploy, run:
 podman play kube manifests/deployment-dev.yaml --down
 ```
 
-## Prod Deployment
+## Production Deployment
 
 1. Ensure that the containers are built appropriately and pushed up to Docker Hub.
 
@@ -73,3 +98,7 @@ buildah manifest push --all \
 ```bash
 kubectl apply -k manifests
 ```
+
+3. ???
+
+4. Profit!
